@@ -1,25 +1,12 @@
-const express = require('express')
-const webSocket = require('ws')
-const app = express()
-
-const server = require('http').createServer(app)
-
-app.get('/' , (req , res)=>{
-    res.send("Hello World")
+const http = require('http').createServer()
+const io = require('socket.io')(http ,{
+    cors: {origin : "*"}
 })
 
-const wss = new webSocket.Server({server : server})
-
-var port = 3000
-
-wss.on('connection' , function connection(ws){
-    console.log("A Client connected")
-    ws.send("Welcome new client")
-
-    ws.on('message' , function incoming(message){
-        console.log(`client sent ${message}`)
-        ws.send('Got your msg')
+io.on('connection' , (socket)=>{
+    console.log("New connection made")
+    socket.on('message' , (msg)=>{
+        console.log(msg)
+        socket.emit("message" , `${socket.id} said : ${msg}`)
     })
 })
-
-app.listen(port , () => console.log(`server started at http://localhost:${port}/`))
