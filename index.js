@@ -10,3 +10,4 @@ io.on('connection' , (socket)=>{
         socket.emit("message" , `${socket.id} said : ${msg}`)
     })
 })
+http.listen(3000 , () => console.log("Listening to http://localhost:3000/"))
